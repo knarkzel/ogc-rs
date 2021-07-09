@@ -3,6 +3,7 @@
 //! This module implements a safe wrapper around the graphics functions found in ``gx.h``.
 
 use core::ffi::c_void;
+use ogc_sys::{Mtx as Mtx34, Mtx44};
 
 /// Helper function for `Gx::init`
 pub fn gp_fifo(fifo_size: usize) -> *mut c_void {
@@ -12,9 +13,6 @@ pub fn gp_fifo(fifo_size: usize) -> *mut c_void {
         gp_fifo
     }
 }
-
-pub type Mtx34 = [[f32; 4]; 3];
-pub type Mtx44 = [[f32; 4]; 4];
 
 /// Represents the GX service.
 pub struct Gx;

@@ -5,9 +5,8 @@
 /// Represents the gu service.
 pub struct Gu;
 
-use crate::gx::{Mtx34, Mtx44};
-
-pub type Vector = ogc_sys::guVector;
+use ogc_sys::guVector;
+use ogc_sys::{Mtx as Mtx34, Mtx44};
 
 impl Gu {
     /// Sets a 4x4 matrix for orthographic projection.
@@ -24,7 +23,12 @@ impl Gu {
 
     /// Sets a world-space to camera-space transformation matrix.
     /// See [guLookAt](https://libogc.devkitpro.org/gu_8h.html#a3ed1b8f80bc0ab13879bd8ce7c16f5ee) for more.
-    pub fn look_at(mt: &mut Mtx34, cam_pos: &mut Vector, cam_up: &mut Vector, target: &mut Vector) {
+    pub fn look_at(
+        mt: &mut Mtx34,
+        cam_pos: &mut guVector,
+        cam_up: &mut guVector,
+        target: &mut guVector,
+    ) {
         unsafe {
             ogc_sys::guLookAt(
                 mt as *mut _,
