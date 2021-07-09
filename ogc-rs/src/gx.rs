@@ -236,6 +236,18 @@ impl Gx {
         unsafe { ogc_sys::GX_Begin(primitive, vtxfmt, vtxcnt) }
     }
 
+    /// Sets the parameters for the alpha compare function which uses the alpha output from the last active TEV stage.
+    /// See [Gx_SetAlphaCompare](https://libogc.devkitpro.org/gx_8h.html#a23ac269062a1b2c2efc8ad5aae24b26a) for more.
+    pub fn set_alpha_compare(comp0: u8, ref0: u8, aop: u8, comp1: u8, ref1: u8) {
+        unsafe { ogc_sys::GX_SetAlphaCompare(comp0, ref0, aop, comp1, ref1) }
+    }
+
+    /// Sets the parameters for the alpha compare function which uses the alpha output from the last active TEV stage.
+    /// See [GX_SetClipMode](https://libogc.devkitpro.org/gx_8h.html#a3d348d7af8ded25b57352e956f43d974) for more.
+    pub fn set_clip_mode(mode: u8) {
+        unsafe { ogc_sys::GX_SetClipMode(mode) }
+    }
+
     pub fn flush() {
         unsafe { ogc_sys::GX_Flush() }
     }
