@@ -8,3 +8,4 @@
 #include <gccore.h>
 #include <ogcsys.h>
 #include <wiiuse/wpad.h>
+#include <asndlib.h>

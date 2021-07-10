@@ -1753,6 +1753,31 @@ pub const WPAD_THRESH_DEFAULT_ACCEL: u32 = 20;
 pub const WPAD_THRESH_DEFAULT_JOYSTICK: u32 = 2;
 pub const WPAD_THRESH_DEFAULT_BALANCEBOARD: u32 = 60;
 pub const WPAD_THRESH_DEFAULT_MOTION_PLUS: u32 = 100;
+pub const ASND_LIB: u32 = 256;
+pub const SND_LIB: u32 = 258;
+pub const SND_OK: u32 = 0;
+pub const SND_INVALID: i32 = -1;
+pub const SND_ISNOTASONGVOICE: i32 = -2;
+pub const SND_BUSY: u32 = 1;
+pub const SND_UNUSED: u32 = 0;
+pub const SND_WORKING: u32 = 1;
+pub const SND_WAITING: u32 = 2;
+pub const VOICE_MONO_8BIT: u32 = 0;
+pub const VOICE_MONO_16BIT: u32 = 1;
+pub const VOICE_MONO_16BIT_BE: u32 = 1;
+pub const VOICE_STEREO_8BIT: u32 = 2;
+pub const VOICE_STEREO_16BIT: u32 = 3;
+pub const VOICE_STEREO_16BIT_BE: u32 = 3;
+pub const VOICE_MONO_8BIT_U: u32 = 4;
+pub const VOICE_MONO_16BIT_LE: u32 = 5;
+pub const VOICE_STEREO_8BIT_U: u32 = 6;
+pub const VOICE_STEREO_16BIT_LE: u32 = 7;
+pub const MIN_VOLUME: u32 = 0;
+pub const MID_VOLUME: u32 = 127;
+pub const MAX_VOLUME: u32 = 255;
+pub const MIN_PITCH: u32 = 1;
+pub const F44100HZ_PITCH: u32 = 44100;
+pub const MAX_PITCH: u32 = 144000;
 pub type __int8_t = ::libc::c_schar;
 pub type __uint8_t = ::libc::c_uchar;
 pub type __int16_t = ::libc::c_short;
@@ -15043,6 +15068,261 @@ extern "C" {
 }
 extern "C" {
     pub fn WPAD_Expansion(chan: ::libc::c_int, exp: *mut expansion_t);
+}
+pub const NOTE_DO: ::libc::c_uint = 0;
+pub const NOTE_DOs: ::libc::c_uint = 1;
+pub const NOTE_REb: ::libc::c_uint = 1;
+pub const NOTE_RE: ::libc::c_uint = 2;
+pub const NOTE_REs: ::libc::c_uint = 3;
+pub const NOTE_MIb: ::libc::c_uint = 3;
+pub const NOTE_MI: ::libc::c_uint = 4;
+pub const NOTE_FA: ::libc::c_uint = 5;
+pub const NOTE_FAs: ::libc::c_uint = 6;
+pub const NOTE_SOLb: ::libc::c_uint = 6;
+pub const NOTE_SOL: ::libc::c_uint = 7;
+pub const NOTE_SOLs: ::libc::c_uint = 8;
+pub const NOTE_LAb: ::libc::c_uint = 8;
+pub const NOTE_LA: ::libc::c_uint = 9;
+pub const NOTE_LAs: ::libc::c_uint = 10;
+pub const NOTE_SIb: ::libc::c_uint = 10;
+pub const NOTE_SI: ::libc::c_uint = 11;
+#[doc = " \\addtogroup notecode Note codification"]
+#[doc = " @{"]
+pub type _bindgen_ty_16 = ::libc::c_uint;
+pub const NOTE_C: ::libc::c_uint = 0;
+pub const NOTE_Cs: ::libc::c_uint = 1;
+pub const NOTE_Db: ::libc::c_uint = 1;
+pub const NOTE_D: ::libc::c_uint = 2;
+pub const NOTE_Ds: ::libc::c_uint = 3;
+pub const NOTE_Eb: ::libc::c_uint = 3;
+pub const NOTE_E: ::libc::c_uint = 4;
+pub const NOTE_F: ::libc::c_uint = 5;
+pub const NOTE_Fs: ::libc::c_uint = 6;
+pub const NOTE_Gb: ::libc::c_uint = 6;
+pub const NOTE_G: ::libc::c_uint = 7;
+pub const NOTE_Gs: ::libc::c_uint = 8;
+pub const NOTE_Ab: ::libc::c_uint = 8;
+pub const NOTE_A: ::libc::c_uint = 9;
+pub const NOTE_As: ::libc::c_uint = 10;
+pub const NOTE_Bb: ::libc::c_uint = 10;
+pub const NOTE_B: ::libc::c_uint = 11;
+pub type _bindgen_ty_17 = ::libc::c_uint;
+#[doc = " \\brief Callback type for ASND_SetVoice()."]
+pub type ASNDVoiceCallback = ::core::option::Option<unsafe extern "C" fn(voice: s32)>;
+extern "C" {
+    #[doc = " \\brief Initializes the SND lib and fixes the hardware sample rate."]
+    #[doc = " \\param[in] note \\ref notecode to play. for example: NOTE(C,4) for note C and octave 4."]
+    #[doc = " \\param[in] freq_base Frequency base of the sample. For example 8000Hz."]
+    #[doc = " \\param[in] note_base \\ref notecode of the sample. For example: NOTE(L, 3) for note L and octave 3 (LA 3)."]
+    #[doc = " \\return Frequency, in Hz."]
+    pub fn ANote2Freq(
+        note: ::libc::c_int,
+        freq_base: ::libc::c_int,
+        note_base: ::libc::c_int,
+    ) -> ::libc::c_int;
+}
+extern "C" {
+    #[doc = " \\brief Initializes the ASND lib and fixes the hardware sample rate to 48000."]
+    #[doc = " \\return None."]
+    pub fn ASND_Init();
+}
+extern "C" {
+    #[doc = " \\brief De-initializes the ASND lib."]
+    #[doc = " \\return None."]
+    pub fn ASND_End();
+}
+extern "C" {
+    #[doc = " \\brief Used to pause (or unpause) the sound."]
+    #[doc = " \\note The sound starts paused when ASND_Init() is called."]
+    #[doc = " \\param[in] paused If 1, sound is paused; sound can be unpaused with 0."]
+    #[doc = " \\return None."]
+    pub fn ASND_Pause(paused: s32);
+}
+extern "C" {
+    #[doc = " \\brief Returns sound paused status."]
+    #[doc = " \\return 1 if paused, 0 if unpaused."]
+    pub fn ASND_Is_Paused() -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Returns the global time."]
+    #[doc = " \\details The time is updated from the IRQ."]
+    #[doc = " \\return The current time, in milliseconds."]
+    pub fn ASND_GetTime() -> u32_;
+}
+extern "C" {
+    #[doc = " \\brief Retrieves the global sample counter."]
+    #[doc = " \\details This counter is updated from the IRQ in steps of ASND_GetSamplesPerTick()."]
+    #[doc = " \\note You can use this to implement one timer with high precision."]
+    #[doc = " \\return Current sample."]
+    pub fn ASND_GetSampleCounter() -> u32_;
+}
+extern "C" {
+    #[doc = " \\brief Retrieves the samples sent from the IRQ in one tick."]
+    #[doc = " \\return Samples per tick."]
+    pub fn ASND_GetSamplesPerTick() -> u32_;
+}
+extern "C" {
+    #[doc = " \\brief Set the global time."]
+    #[doc = " \\details This time is updated from the IRQ."]
+    #[doc = " \\param[in] time Fix the current time, in milliseconds."]
+    #[doc = " \\return None."]
+    pub fn ASND_SetTime(time: u32_);
+}
+extern "C" {
+    #[doc = " \\brief Sets a global callback for general purposes."]
+    #[doc = " \\details This callback is called from the IRQ."]
+    #[doc = " \\param[in] callback Callback function to assign."]
+    #[doc = " \\return None."]
+    pub fn ASND_SetCallback(callback: ::core::option::Option<unsafe extern "C" fn()>);
+}
+extern "C" {
+    #[doc = " \\brief Returns the current audio rate."]
+    #[doc = " \\note This function is implemented for compatibility with SNDLIB."]
+    #[doc = " \\return Audio rate (48000)."]
+    pub fn ASND_GetAudioRate() -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Sets a PCM voice to play."]
+    #[doc = " \\details This function stops one previous voice. Use ASND_StatusVoice() to test the status condition."]
+    #[doc = " \\note The voices are played in 16-bit stereo, regardless of the source format.<br><br>"]
+    #[doc = ""]
+    #[doc = " \\note \\a callback is used to implement a double buffer. When the second buffer is empty, the callback function is called with the voice number"]
+    #[doc = " as an argument. You can use <tt>void <i>callback</i> (s32 voice)</tt> to call ASND_AddVoice() and add one voice to the second buffer. When the callback"]
+    #[doc = " is non-NULL the, the voice never stops and returns SND_WAITING if successful on timeout condition."]
+    #[doc = " \\param[in] voice Voice slot to use for this sound; valid values are 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\param[in] format \\ref sndsetvoiceformats to use for this sound."]
+    #[doc = " \\param[in] pitch Frequency to use, in Hz."]
+    #[doc = " \\param[in] delay Delay to wait before playing this voice; value is in milliseconds."]
+    #[doc = " \\param[in] snd Buffer containing samples to play back; the buffer <b>must</b> be aligned and padded to 32 bytes!"]
+    #[doc = " \\param[in] size_snd Size of the buffer samples, in bytes."]
+    #[doc = " \\param[in] volume_l \\ref voicevol of the left channel; value can be 0 - 255 inclusive."]
+    #[doc = " \\param[in] volume_r \\ref voicevol of the right channel; value can be 0 - 255 inclusive."]
+    #[doc = " \\param[in] callback Optional callback function to use; set to NULL for no callback. See the note above for details."]
+    #[doc = " \\return SND_OK or SND_INVALID."]
+    pub fn ASND_SetVoice(
+        voice: s32,
+        format: s32,
+        pitch: s32,
+        delay: s32,
+        snd: *mut ::libc::c_void,
+        size_snd: s32,
+        volume_l: s32,
+        volume_r: s32,
+        callback: ASNDVoiceCallback,
+    ) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Sets a PCM voice to play infinitely."]
+    #[doc = " \\note See ASND_SetVoice() for a detailed description, as it is largely identical."]
+    pub fn ASND_SetInfiniteVoice(
+        voice: s32,
+        format: s32,
+        pitch: s32,
+        delay: s32,
+        snd: *mut ::libc::c_void,
+        size_snd: s32,
+        volume_l: s32,
+        volume_r: s32,
+    ) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Adds a PCM voice to play from the second buffer."]
+    #[doc = " \\note This function requires a call to ASND_SetVoice() and its subsequent return value to be a status other than SND_UNUSED prior to calling this one."]
+    #[doc = " \\param[in] voice Voice slot to attach this buffer to; value must be 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\param[in] snd Buffer containing the samples; it <b>must</b> be aligned and padded to 32 bytes AND have the same sample format as the first buffer."]
+    #[doc = " \\param[in] size_snd Size of the buffer samples, in bytes."]
+    #[doc = " \\return SND_OK or SND_INVALID; it may also return SND_BUSY if the second buffer is not empty and the voice cannot be added."]
+    pub fn ASND_AddVoice(voice: s32, snd: *mut ::libc::c_void, size_snd: s32) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Stops the selected voice."]
+    #[doc = " \\details If the voice is used in song mode, you need to assign the samples with ASND_SetSongSampleVoice() again. In this case, use ANS_PauseSongVoice()"]
+    #[doc = " to stop the voice without loss of samples."]
+    #[doc = " \\param[in] voice Voice to stop, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\return SND_OK or SND_INVALID."]
+    pub fn ASND_StopVoice(voice: s32) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Pauses the selected voice."]
+    #[doc = " \\param[in] voice Voice to pause, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\return SND_OK or SND_INVALID."]
+    pub fn ASND_PauseVoice(voice: s32, pause: s32) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Returns the status of the selected voice."]
+    #[doc = " \\param[in] voice Voice slot to get the status from, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\return SND_INVALID if invalid, else a value from \\ref sndiavretvals."]
+    pub fn ASND_StatusVoice(voice: s32) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Returns the first unused voice."]
+    #[doc = " \\note Voice 0 is the last possible voice that can be returned. The idea is that this voice is reserved for a MOD/OGG/MP3/etc. player. With this in mind,"]
+    #[doc = " you can use this function to determine that the rest of the voices are working if the return value is < 1."]
+    #[doc = " \\return SND_INVALID or the first free voice from 0 to (MAX_SND_VOICES-1)."]
+    pub fn ASND_GetFirstUnusedVoice() -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Changes the voice pitch in real-time."]
+    #[doc = " \\details This function can be used to create audio effects such as Doppler effect emulation."]
+    #[doc = " \\param[in] voice Voice to change the pitch of, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\return SND_OK or SND_INVALID."]
+    pub fn ASND_ChangePitchVoice(voice: s32, pitch: s32) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Changes the voice volume in real-time."]
+    #[doc = " \\details This function can be used to create audio effects like distance attenuation."]
+    #[doc = " \\param[in] voice Voice to change the volume of, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\param[in] volume_l \\ref voicevol to set the left channel to, from 0 to 255."]
+    #[doc = " \\param[in] volume_r \\ref voicevol to set the right channel to, from 0 to 255."]
+    #[doc = " \\return SND_OK or SND_INVALID."]
+    pub fn ASND_ChangeVolumeVoice(voice: s32, volume_l: s32, volume_r: s32) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Returns the voice tick counter."]
+    #[doc = " \\details This value represents the number of ticks since this voice started to play, sans delay time. It uses the same resolution as the internal"]
+    #[doc = " sound buffer. For example, if the lib is initialized with INIT_RATE_48000, a return value of 24000 is equal to 0.5 seconds. This value can be used, for"]
+    #[doc = " example, to synchronize audio and video."]
+    #[doc = " \\note This function does not return error codes."]
+    #[doc = " \\param[in] voice Voice to retrieve the counter value from, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\return Number of ticks since this voice started playing."]
+    pub fn ASND_GetTickCounterVoice(voice: s32) -> u32_;
+}
+extern "C" {
+    #[doc = " \\brief Returns the voice playback time."]
+    #[doc = " \\details This value represents the time, in milliseconds, since this voice started playing, sans delay time. This value can be used, for example, to"]
+    #[doc = " synchronize audio and video."]
+    #[doc = " \\note This function does not return error codes."]
+    #[doc = " \\param[in] voice Voice to retrieve the time value from, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\return Amount of time since this voice has started playing."]
+    pub fn ASND_GetTimerVoice(voice: s32) -> u32_;
+}
+extern "C" {
+    #[doc = " \\brief Tests if \\a pointer is in use by \\a voice as a buffer."]
+    #[doc = " \\param[in] voice Voice to test, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\param[in] pointer Address to test. This must be the same pointer sent to ASND_AddVoice() or ASND_SetVoice()."]
+    #[doc = " \\return SND_INVALID if invalid"]
+    #[doc = " \\return 0 if the pointer is unused"]
+    #[doc = " \\return 1 if the pointer used as a buffer."]
+    pub fn ASND_TestPointer(voice: s32, pointer: *mut ::libc::c_void) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Tests to determine if the \\a voice is ready to receive a new buffer sample with ASND_AddVoice()."]
+    #[doc = " \\details You can use this function to block a reader when double buffering is used. It works similarly to ASND_TestPointer() without needing to pass a"]
+    #[doc = " pointer."]
+    #[doc = " \\param[in] voice Voice to test, from 0 to (MAX_SND_VOICES-1)."]
+    #[doc = " \\return SND_INVALID"]
+    #[doc = " \\return 0 if voice is NOT ready to receive a new voice."]
+    #[doc = " \\return 1 if voice is ready to receive a new voice with ASND_AddVoice()."]
+    pub fn ASND_TestVoiceBufferReady(voice: s32) -> s32;
+}
+extern "C" {
+    #[doc = " \\brief Returns the DSP usage."]
+    #[doc = " \\details The value is a percentage of DSP usage."]
+    #[doc = " \\return DSP usage, in percent."]
+    pub fn ASND_GetDSP_PercentUse() -> u32_;
+}
+extern "C" {
+    pub fn ASND_GetDSP_ProcessTime() -> u32_;
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]

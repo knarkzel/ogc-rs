@@ -65,6 +65,9 @@ pub use utils::*;
 // Runtime Functions
 pub mod runtime;
 
+// Asnd Implementation
+pub mod asnd;
+
 #[cfg(feature = "ffi")]
 pub extern crate ogc_sys as ffi;
 
@@ -84,6 +87,7 @@ pub mod prelude {
     pub use crate::system::*;
     pub use crate::video::*;
     pub use crate::wpad::*;
+    pub use crate::asnd::*;
     pub use crate::{print, println};
 
     // Global Allocator
