@@ -63,46 +63,46 @@ impl VoiceOptions {
     }
 
     /// Voice slot to use for this sound. Valid values are `0..16` non-inclusive.
-    pub fn voice(mut self, voice: u32) -> Self {
+    pub fn voice(self, voice: u32) -> Self {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        self.voice = voice;
-        self
+        Self { voice, ..self }
     }
 
     /// Format to use for this sound.
-    pub fn format(mut self, format: VoiceFormat) -> Self {
-        self.format = format;
-        self
+    pub fn format(self, format: VoiceFormat) -> Self {
+        Self { format, ..self }
     }
 
     /// Frequency to use, in Hz.
-    pub fn pitch(mut self, pitch: u32) -> Self {
-        self.pitch = pitch;
-        self
+    pub fn pitch(self, pitch: u32) -> Self {
+        Self { pitch, ..self }
     }
 
     /// Delay to wait before playing, in milliseconds.
-    pub fn delay(mut self, delay: u32) -> Self {
-        self.delay = delay;
-        self
+    pub fn delay(self, delay: u32) -> Self {
+        Self { delay, ..self }
     }
 
     /// Voice volume of the left channel.
-    pub fn volume_left(mut self, volume_left: u8) -> Self {
-        self.volume_left = volume_left;
-        self
+    pub fn volume_left(self, volume_left: u8) -> Self {
+        Self {
+            volume_left,
+            ..self
+        }
     }
 
     /// Voice volume of the right channel.
-    pub fn volume_right(mut self, volume_right: u8) -> Self {
-        self.volume_right = volume_right;
-        self
+    pub fn volume_right(self, volume_right: u8) -> Self {
+        Self {
+            volume_right,
+            ..self
+        }
     }
 
     /// Optional callback function to use.
-    pub fn callback(mut self, callback: Box<fn(i32) -> ()>) -> Self {
-        self.callback = Some(callback);
-        self
+    pub fn callback(self, callback: Box<fn(i32) -> ()>) -> Self {
+        let callback = Some(callback);
+        Self { callback, ..self }
     }
 }
 
@@ -155,24 +155,18 @@ pub struct Asnd;
 impl Asnd {
     /// Initializes the asnd lib and fixes the hardware sample rate to 48000hz.
     pub fn init() -> Self {
-        unsafe {
-            ogc_sys::ASND_Init();
-            Self
-        }
+        unsafe { ogc_sys::ASND_Init() };
+        Self
     }
 
-    /// De-initializes the asnd lib. This is also called when `Asnd` gets dropped.
+    /// De-initializes the asnd lib.
     pub fn end() {
-        unsafe {
-            ogc_sys::ASND_End();
-        }
+        unsafe { ogc_sys::ASND_End() };
     }
 
     /// Pauses if true and resumes if false.
     pub fn pause(should_pause: bool) {
-        unsafe {
-            ogc_sys::ASND_Pause(should_pause as i32);
-        }
+        unsafe { ogc_sys::ASND_Pause(should_pause as _) };
     }
 
     /// Returns true if paused, false if not paused.
@@ -197,9 +191,7 @@ impl Asnd {
 
     /// Sets the global time, in milliseconds.
     pub fn set_time(time: u32) {
-        unsafe {
-            ogc_sys::ASND_SetTime(time);
-        }
+        unsafe { ogc_sys::ASND_SetTime(time) };
     }
 
     /// Sets a global callback for general purposes. It is called by the IRQ.
@@ -225,8 +217,6 @@ impl Asnd {
     /// `Asnd::status_voice()` to test status. The voices are played in 16-bit stereo,
     /// regardless of source format. The buffer MUST be aligned and padded to 32 bytes.
     pub fn set_voice(options: VoiceOptions, sound_buffer: &mut [u8]) -> Result<()> {
-        // Self::validate_buffer(sound_buffer);
-
         let callback = options.callback.map(|f| {
             let ptr = Box::into_raw(f);
             let code: unsafe extern "C" fn(i32) = unsafe { mem::transmute(ptr) };
@@ -235,14 +225,14 @@ impl Asnd {
 
         let err = unsafe {
             ogc_sys::ASND_SetVoice(
-                options.voice as i32,
+                options.voice as _,
                 options.format.as_i32(),
-                options.pitch as i32,
-                options.delay as i32,
+                options.pitch as _,
+                options.delay as _,
                 sound_buffer.as_mut_ptr() as *mut _,
-                sound_buffer.len() as i32,
-                options.volume_left as i32,
-                options.volume_right as i32,
+                sound_buffer.len() as _,
+                options.volume_left as _,
+                options.volume_right as _,
                 callback,
             )
         };
@@ -253,18 +243,16 @@ impl Asnd {
     /// Sets a PCM voice to play infinitely. See `Asnd::set_voice()` as it is largely identical.
     /// The buffer MUST be aligned and padded to 32 bytes.
     pub fn set_infinite_voice(options: VoiceOptions, sound_buffer: &mut [u8]) -> Result<()> {
-        // Self::validate_buffer(sound_buffer);
-
         let err = unsafe {
             ogc_sys::ASND_SetInfiniteVoice(
-                options.voice as i32,
+                options.voice as _,
                 options.format.as_i32(),
-                options.pitch as i32,
-                options.delay as i32,
+                options.pitch as _,
+                options.delay as _,
                 sound_buffer.as_mut_ptr() as *mut _,
-                sound_buffer.len() as i32,
-                options.volume_left as i32,
-                options.volume_right as i32,
+                sound_buffer.len() as _,
+                options.volume_left as _,
+                options.volume_right as _,
             )
         };
 
@@ -277,13 +265,12 @@ impl Asnd {
     /// The buffer MUST be aligned and padded to 32 bytes.
     pub fn add_voice(voice: u32, sound_buffer: &mut [u8]) -> Result<()> {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        // Self::validate_buffer(sound_buffer);
 
         let err = unsafe {
             ogc_sys::ASND_AddVoice(
-                voice as i32,
+                voice as _,
                 sound_buffer.as_mut_ptr() as *mut _,
-                sound_buffer.len() as i32,
+                sound_buffer.len() as _,
             )
         };
 
@@ -294,21 +281,21 @@ impl Asnd {
     /// assign the samples with `Asnd::set_song_sample_voice()`.
     pub fn stop_voice(voice: u32) -> Result<()> {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        let err = unsafe { ogc_sys::ASND_StopVoice(voice as i32) };
+        let err = unsafe { ogc_sys::ASND_StopVoice(voice as _) };
         if_not!(SND_OK => "Asnd::stop_voice() failed with error {}", err)
     }
 
     /// Pauses the selected voice. Can also be used to resume voice.
     pub fn pause_voice(voice: u32, pause: bool) -> Result<()> {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        let err = unsafe { ogc_sys::ASND_PauseVoice(voice as i32, pause as i32) };
+        let err = unsafe { ogc_sys::ASND_PauseVoice(voice as _, pause as _) };
         if_not!(SND_OK => "Asnd::pause_voice() failed with error {}", err)
     }
 
     /// Returns the state of the selected voice.
     pub fn status_voice(voice: u32) -> Result<()> {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        let err = unsafe { ogc_sys::ASND_StatusVoice(voice as i32) };
+        let err = unsafe { ogc_sys::ASND_StatusVoice(voice as _) };
         if_not!(SND_WORKING => "Asnd::status_voice() failed with error {}", err)
     }
 
@@ -316,7 +303,7 @@ impl Asnd {
     pub fn get_first_unused_voice() -> Result<u32> {
         let err = unsafe { ogc_sys::ASND_GetFirstUnusedVoice() };
         match err {
-            x if x < 16 => Ok(x as u32),
+            x if x < 16 && x >= 0 => Ok(x as _),
             _ => Err(OgcError::Audio(format!(
                 "Asnd::get_first_unused_voice() failed with error {}",
                 err
@@ -328,7 +315,7 @@ impl Asnd {
     /// create audio effects such as Doppler effect simulation.
     pub fn change_pitch_voice(voice: u32, pitch: u32) -> Result<()> {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        let err = unsafe { ogc_sys::ASND_ChangePitchVoice(voice as i32, pitch as i32) };
+        let err = unsafe { ogc_sys::ASND_ChangePitchVoice(voice as _, pitch as _) };
         if_not!(SND_OK => "Asnd::change_pitch_voice() failed with error {}", err)
     }
 
@@ -337,7 +324,7 @@ impl Asnd {
     pub fn change_volume_voice(voice: u32, volume_left: u8, volume_right: u8) -> Result<()> {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
         let err = unsafe {
-            ogc_sys::ASND_ChangeVolumeVoice(voice as i32, volume_left as i32, volume_right as i32)
+            ogc_sys::ASND_ChangeVolumeVoice(voice as _, volume_left as _, volume_right as _)
         };
         if_not!(SND_OK => "Asnd::change_volume_voice() failed with error {}", err)
     }
@@ -347,14 +334,14 @@ impl Asnd {
     /// `INIT_RATE=48000`, a return value of 24000 is equal to 0.5 seconds.
     pub fn get_tick_counter_voice(voice: u32) -> u32 {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        unsafe { ogc_sys::ASND_GetTickCounterVoice(voice as i32) }
+        unsafe { ogc_sys::ASND_GetTickCounterVoice(voice as _) }
     }
 
     /// Returns the voice playback time. This value represents the time in milliseconds
     /// since this voice started playing.
     pub fn get_timer_voice(voice: u32) -> u32 {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        unsafe { ogc_sys::ASND_GetTimerVoice(voice as i32) }
+        unsafe { ogc_sys::ASND_GetTimerVoice(voice as _) }
     }
 
     /// Tests if a pointer is in use by a voice as a buffer.
@@ -364,14 +351,14 @@ impl Asnd {
     /// Returns `ogc_sys::SND_INVALID` if invalid.
     pub fn test_pointer<T>(voice: u32, pointer: *mut T) -> i32 {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        unsafe { ogc_sys::ASND_TestPointer(voice as i32, pointer as *mut _) }
+        unsafe { ogc_sys::ASND_TestPointer(voice as _, pointer as *mut _) }
     }
 
     /// Tests to determine if the voice is ready to receive a new buffer sample
     /// with `Asnd::add_voice()`. Returns true if voice is ready.
     pub fn test_voice_buffer_ready(voice: u32) -> bool {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        unsafe { ogc_sys::ASND_TestVoiceBufferReady(voice as i32) > 0 }
+        unsafe { ogc_sys::ASND_TestVoiceBufferReady(voice as _) > 0 }
     }
 
     /// Returns the DSP usage, in percent `(0..=100)`.
@@ -382,24 +369,5 @@ impl Asnd {
     /// Returns DSP process time, in nano seconds.
     pub fn get_dsp_process_time() -> u32 {
         unsafe { ogc_sys::ASND_GetDSP_ProcessTime() }
-    }
-
-    fn validate_buffer(sound_buffer: &mut [u8]) {
-        assert_eq!(
-            32,
-            mem::align_of_val(sound_buffer),
-            "Data is not aligned correctly."
-        );
-        assert_eq!(
-            0,
-            sound_buffer.len() % 32,
-            "Data length is not a multiple of 32."
-        );
-    }
-}
-
-impl Drop for Asnd {
-    fn drop(&mut self) {
-        Self::end();
     }
 }

@@ -1,9 +1,31 @@
 //! The ``mp3player`` module of ``ogc-rs``.
 //!
 //! This module implements a safe wrapper around the mp3-related functions found in ``mp3player.h``.
+//!
+//! Note: In order to use this library, you need to have the following linker flags
+//! in your `powerpc-unknown-eabi.json` ("post-link-args" goes after "pre-link-args"):
+//!
+//! ```json
+//! "post-link-args": {
+//!     "gcc": [
+//!         "-lasnd",
+//!         "-logc",
+//!         "-lmad"
+//!     ]
+//! },
+//! ```
 
 /// Represents the mp3player service.
 /// This service can only be created once!
+///
+/// # Minimal Example
+///
+/// ```rust
+/// const MUSIC: &[u8] = include_bytes!("../sample.mp3");
+/// let asnd = Asnd::init();
+/// let mp3 = Mp3Player::init();
+/// Mp3Player::play_buffer(MUSIC);
+/// ```
 pub struct Mp3Player;
 
 impl Mp3Player {
@@ -31,11 +53,5 @@ impl Mp3Player {
 
     pub fn stop() {
         unsafe { ogc_sys::MP3Player_Stop() };
-    }
-}
-
-impl Drop for Mp3Player {
-    fn drop(&mut self) {
-        Self::stop();
     }
 }

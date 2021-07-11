@@ -88,11 +88,11 @@ pub mod prelude {
     pub use crate::debug::*;
     pub use crate::gu::*;
     pub use crate::gx::*;
+    pub use crate::mp3player::*;
     pub use crate::pad::*;
     pub use crate::system::*;
     pub use crate::video::*;
     pub use crate::wpad::*;
-    pub use crate::mp3player::*;
     pub use crate::{print, println};
 
     // Global Allocator

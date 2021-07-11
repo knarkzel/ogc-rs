@@ -1,6 +1,18 @@
 //! The ``wpad`` module of ``ogc-rs``.
 //!
 //! This module implements a safe wrapper around the wii controller functions found in ``wpad.h``.
+//!
+//! Note: In order to use this library, you need to have the following linker flags
+//! in your `powerpc-unknown-eabi.json` ("post-link-args" goes after "pre-link-args"):
+//!
+//! ```json
+//! "post-link-args": {
+//!     "gcc": [
+//!         "-lwiiuse",
+//!         "-logc"
+//!     ]
+//! },
+//! ```
 
 use alloc::boxed::Box;
 use core::mem;
@@ -51,10 +63,8 @@ impl PartialEq<WpadButton> for u32 {
 impl Wpad {
     /// Initialization of the wpad service.
     pub fn init() -> Self {
-        unsafe {
-            ogc_sys::WPAD_Init();
-            Self
-        }
+        unsafe { ogc_sys::WPAD_Init() };
+        Self
     }
 
     /// Scan all pads. Must be called every time before checking buttons.
@@ -63,15 +73,15 @@ impl Wpad {
     }
 
     pub fn buttons_down(remote: Remote) -> u32 {
-        unsafe { ogc_sys::WPAD_ButtonsDown(remote as i32) }
+        unsafe { ogc_sys::WPAD_ButtonsDown(remote as _) }
     }
 
     pub fn buttons_held(remote: Remote) -> u32 {
-        unsafe { ogc_sys::WPAD_ButtonsHeld(remote as i32) }
+        unsafe { ogc_sys::WPAD_ButtonsHeld(remote as _) }
     }
 
     pub fn buttons_up(remote: Remote) -> u32 {
-        unsafe { ogc_sys::WPAD_ButtonsHeld(remote as i32) }
+        unsafe { ogc_sys::WPAD_ButtonsHeld(remote as _) }
     }
 
     /// Registers a battery dead callback function.
