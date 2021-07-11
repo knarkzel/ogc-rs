@@ -206,7 +206,7 @@ impl Asnd {
     /// `Asnd::status_voice()` to test status. The voices are played in 16-bit stereo,
     /// regardless of source format. The buffer MUST be aligned and padded to 32 bytes.
     pub fn set_voice(options: VoiceOptions, sound_buffer: &mut [u8]) -> Result<()> {
-        Self::validate_buffer(sound_buffer);
+        // Self::validate_buffer(sound_buffer);
 
         let callback = options.callback.map(|f| {
             let ptr = Box::into_raw(f);
@@ -234,7 +234,7 @@ impl Asnd {
     /// Sets a PCM voice to play infinitely. See `Asnd::set_voice()` as it is largely identical.
     /// The buffer MUST be aligned and padded to 32 bytes.
     pub fn set_infinite_voice(options: VoiceOptions, sound_buffer: &mut [u8]) -> Result<()> {
-        Self::validate_buffer(sound_buffer);
+        // Self::validate_buffer(sound_buffer);
 
         let err = unsafe {
             ogc_sys::ASND_SetInfiniteVoice(
@@ -258,7 +258,7 @@ impl Asnd {
     /// The buffer MUST be aligned and padded to 32 bytes.
     fn add_voice(voice: u32, sound_buffer: &mut [u8]) -> Result<()> {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
-        Self::validate_buffer(sound_buffer);
+        // Self::validate_buffer(sound_buffer);
 
         let err = unsafe {
             ogc_sys::ASND_AddVoice(
