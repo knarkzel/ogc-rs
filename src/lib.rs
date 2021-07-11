@@ -88,6 +88,7 @@ pub mod prelude {
     pub use crate::video::*;
     pub use crate::wpad::*;
     pub use crate::asnd::*;
+    pub use crate::audio::*;
     pub use crate::{print, println};
 
     // Global Allocator
