@@ -256,7 +256,7 @@ impl Asnd {
     /// aligned and have same sample format as first buffer. This must only be called after
     /// `Asnd::set_voice()`, which must return `Ok()`.
     /// The buffer MUST be aligned and padded to 32 bytes.
-    fn add_voice(voice: u32, sound_buffer: &mut [u8]) -> Result<()> {
+    pub fn add_voice(voice: u32, sound_buffer: &mut [u8]) -> Result<()> {
         assert!(voice < 16, "Voice index {} is >= 16", voice);
         // Self::validate_buffer(sound_buffer);
 
