@@ -1,6 +1,18 @@
 //! The ``asnd`` module of ``ogc-rs``.
 //!
 //! This module implements a safe wrapper around the audio functions found in ``asnd.h``.
+//!
+//! Note: In order to use this library, you need to have the following linker flags
+//! in your `powerpc-unknown-eabi.json` ("post-link-args" goes after "pre-link-args"):
+//!
+//! ```json
+//! "post-link-args": {
+//!     "gcc": [
+//!         "-lasnd",
+//!         "-logc"
+//!     ]
+//! },
+//! ```
 
 use crate::{OgcError, Result};
 use alloc::boxed::Box;
@@ -127,8 +139,15 @@ impl VoiceFormat {
 
 /// Represents the asnd service.
 /// This service can only be created once!
-/// If you use `Asnd::init()`, you cannot do `Audio::init()`.
-/// Only one of them can be used at a time.
+///
+/// # Minimal Example
+///
+/// ```rust
+/// let asnd = Asnd::init();
+/// let mut buffer = (0..255).cycle().take(32 * 32 * 32 * 32).collect::<Vec<_>>();
+/// Asnd::set_voice(VoiceOptions::new(), &mut buffer).unwrap();
+/// Asnd::pause(false);
+/// ```
 pub struct Asnd;
 
 /// Implementation of the asnd service.

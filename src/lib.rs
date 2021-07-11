@@ -68,6 +68,9 @@ pub mod runtime;
 // Asnd Implementation
 pub mod asnd;
 
+// Mp3player Implementation
+pub mod mp3player;
+
 #[cfg(feature = "ffi")]
 pub extern crate ogc_sys as ffi;
 
@@ -79,6 +82,8 @@ pub mod prelude {
     pub use alloc::{vec, vec::Vec};
 
     // Export Services
+    pub use crate::asnd::*;
+    pub use crate::audio::*;
     pub use crate::console::*;
     pub use crate::debug::*;
     pub use crate::gu::*;
@@ -87,8 +92,7 @@ pub mod prelude {
     pub use crate::system::*;
     pub use crate::video::*;
     pub use crate::wpad::*;
-    pub use crate::asnd::*;
-    pub use crate::audio::*;
+    pub use crate::mp3player::*;
     pub use crate::{print, println};
 
     // Global Allocator

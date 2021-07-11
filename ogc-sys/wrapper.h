@@ -9,3 +9,5 @@
 #include <ogcsys.h>
 #include <wiiuse/wpad.h>
 #include <asndlib.h>
+#include <mp3player.h>
+
