@@ -4,6 +4,7 @@
 
 use alloc::boxed::Box;
 use core::mem;
+use core::ops::{BitAnd, BitOr, BitXor};
 
 /// Represents the pad service. No gamecube controllers can be read until an instance of
 /// this struct is created. This service can only be created once!
@@ -26,7 +27,8 @@ impl PartialEq<Controller> for u16 {
 
 /// The button to be checked for the `pad` service.
 #[derive(Copy, Clone)]
-pub enum PadButton {
+pub enum Button {
+    None = 0,
     Left = 1,
     Right = 2,
     Down = 4,
@@ -41,18 +43,40 @@ pub enum PadButton {
     Start = 4096,
 }
 
-impl PartialEq<PadButton> for u16 {
-    fn eq(&self, other: &PadButton) -> bool {
+impl PartialEq<Button> for u16 {
+    fn eq(&self, other: &Button) -> bool {
         *self == *other as u16
+    }
+}
+
+impl BitOr for Button {
+    type Output = u16;
+
+    fn bitor(self, rhs: Self) -> Self::Output {
+        self as u16 | rhs as u16
+    }
+}
+
+impl BitAnd for Button {
+    type Output = u16;
+
+    fn bitand(self, rhs: Self) -> Self::Output {
+        self as u16 & rhs as u16
+    }
+}
+
+impl BitXor for Button {
+    type Output = u16;
+
+    fn bitxor(self, rhs: Self) -> Self::Output {
+        self as u16 ^ rhs as u16
     }
 }
 
 impl Pad {
     /// Initialization of the pad service.
     pub fn init() {
-        unsafe {
-            ogc_sys::PAD_Init();
-        }
+        unsafe { ogc_sys::PAD_Init() };
     }
 
     /// Scan all pads. Must be called every time before checking buttons.

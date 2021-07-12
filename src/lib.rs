@@ -44,7 +44,7 @@ pub mod gu;
 pub mod pad;
 
 // WPad Implementation
-mod wpad;
+// mod wpad;
 
 // Console Implementation
 pub mod console;
@@ -92,7 +92,7 @@ pub mod prelude {
     pub use crate::pad::*;
     pub use crate::system::*;
     pub use crate::video::*;
-    pub use crate::wpad::*;
+    // pub use crate::wpad::*;
     pub use crate::{print, println};
 
     // Global Allocator
