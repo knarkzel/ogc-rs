@@ -4,7 +4,6 @@
 
 use alloc::boxed::Box;
 use core::mem;
-use core::ops::{BitAnd, BitOr, BitXor};
 
 /// Represents the pad service. No gamecube controllers can be read until an instance of
 /// this struct is created. This service can only be created once!
@@ -36,19 +35,19 @@ macro_rules! enumerate {
 }
 
 enumerate!(Button {
-    None = 0,
-    Left = 1,
-    Right = 2,
-    Down = 4,
-    Up = 8,
-    Z = 16,
-    R = 32,
-    L = 64,
-    A = 256,
-    B = 512,
-    X = 1024,
-    Y = 2048,
-    Start = 4096,
+    Left = 0x0001,
+    Right = 0x0002,
+    Down = 0x0004,
+    Up = 0x0008,
+    Z = 0x0010,
+    R = 0x0020,
+    L = 0x0040,
+    A = 0x0100,
+    B = 0x0200,
+    X = 0x0400,
+    Y = 0x0800,
+    Menu = 0x1000,
+    Start = 0x1000,
 });
 
 impl Pad {

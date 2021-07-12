@@ -21,16 +21,15 @@ fn main(_argc: isize, _argv: *const *const u8) -> isize {
     loop {
         Pad::scan_pads();
 
-        // Check for pressed buttons
-        let pressed = Pad::buttons_down(Controller::One);
-
-        if pressed == Button::A {
-            println!("A was pressed");
-        }
-
-        if pressed == Button::Start {
-            println!("Start was pressed");
-        }
+        // Check for pressed buttons, fancy way
+        let output = match Pad::buttons_down(Controller::One) {
+            Button::A => "A was pressed!",
+            Button::B => "B was pressed!",
+            Button::X => "X was pressed!",
+            Button::Y => "Y was pressed!",
+            _ => "",
+        };
+        println!("{}", output);
 
         // Check for released buttons
         let released = Pad::buttons_up(Controller::One);
