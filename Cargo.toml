@@ -11,13 +11,8 @@ name = "ogc"
 [dependencies]
 bitflags = "1.2"
 libc = "0.2"
-
-[dependencies.num_enum]
-version = "0.5"
-default-features = false
-
-[dependencies.ogc-sys]
-path = "ogc-sys"
+num_enum = { version = "0.5", default-features = false }
+ogc-sys = { path = "ogc-sys" }
 
 [features]
 ffi = []
