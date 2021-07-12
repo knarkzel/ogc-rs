@@ -25,52 +25,24 @@ impl PartialEq<Controller> for u16 {
     }
 }
 
-/// The button to be checked for the `pad` service.
-#[derive(Copy, Clone)]
-pub enum Button {
-    None = 0,
-    Left = 1,
-    Right = 2,
-    Down = 4,
-    Up = 8,
-    Z = 16,
-    R = 32,
-    L = 64,
-    A = 256,
-    B = 512,
-    X = 1024,
-    Y = 2048,
-    Start = 4096,
-}
-
-impl PartialEq<Button> for u16 {
-    fn eq(&self, other: &Button) -> bool {
-        *self == *other as u16
-    }
-}
-
-impl BitOr for Button {
-    type Output = u16;
-
-    fn bitor(self, rhs: Self) -> Self::Output {
-        self as u16 | rhs as u16
-    }
-}
-
-impl BitAnd for Button {
-    type Output = u16;
-
-    fn bitand(self, rhs: Self) -> Self::Output {
-        self as u16 & rhs as u16
-    }
-}
-
-impl BitXor for Button {
-    type Output = u16;
-
-    fn bitxor(self, rhs: Self) -> Self::Output {
-        self as u16 ^ rhs as u16
-    }
+/// The button to be checked for the `pad` service. This implementation is more flexible than using
+/// enum, but looks uglier (here).
+#[allow(non_snake_case)]
+#[allow(non_upper_case_globals)]
+pub mod Button {
+    const None: u16 = 0;
+    const Left: u16 = 1;
+    const Right: u16 = 2;
+    const Down: u16 = 4;
+    const Up: u16 = 8;
+    const Z: u16 = 16;
+    const R: u16 = 32;
+    const L: u16 = 64;
+    const A: u16 = 256;
+    const B: u16 = 512;
+    const X: u16 = 1024;
+    const Y: u16 = 2048;
+    const Start: u16 = 4096;
 }
 
 impl Pad {
