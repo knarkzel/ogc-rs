@@ -25,25 +25,31 @@ impl PartialEq<Controller> for u16 {
     }
 }
 
-/// The button to be checked for the `pad` service. This implementation is more flexible than using
-/// enum, but looks uglier (here).
-#[allow(non_snake_case)]
-#[allow(non_upper_case_globals)]
-pub mod Button {
-    const None: u16 = 0;
-    const Left: u16 = 1;
-    const Right: u16 = 2;
-    const Down: u16 = 4;
-    const Up: u16 = 8;
-    const Z: u16 = 16;
-    const R: u16 = 32;
-    const L: u16 = 64;
-    const A: u16 = 256;
-    const B: u16 = 512;
-    const X: u16 = 1024;
-    const Y: u16 = 2048;
-    const Start: u16 = 4096;
+macro_rules! enumerate {
+    ($name:ident { $($variant:ident = $value:expr),* $(,)* }) => {
+        #[allow(non_snake_case)]
+        #[allow(non_upper_case_globals)]
+        pub mod $name {
+            $(pub const $variant: u16 = $value;)*
+        }
+    };
 }
+
+enumerate!(Button {
+    None = 0,
+    Left = 1,
+    Right = 2,
+    Down = 4,
+    Up = 8,
+    Z = 16,
+    R = 32,
+    L = 64,
+    A = 256,
+    B = 512,
+    X = 1024,
+    Y = 2048,
+    Start = 4096,
+});
 
 impl Pad {
     /// Initialization of the pad service.
