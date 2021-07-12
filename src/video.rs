@@ -95,6 +95,7 @@ pub enum ViField {
 pub struct Video {
     pub render_config: RenderConfig,
     pub framebuffer: *mut c_void,
+    framebuffer_double: *mut c_void,
 }
 
 impl Video {
@@ -107,6 +108,9 @@ impl Video {
             Self {
                 render_config: r_mode,
                 framebuffer: mem_cached_to_uncached!(System::allocate_framebuffer(
+                    Self::get_preferred_mode().into()
+                )),
+                framebuffer_double: mem_cached_to_uncached!(System::allocate_framebuffer(
                     Self::get_preferred_mode().into()
                 )),
             }
@@ -204,5 +208,10 @@ impl Video {
         unsafe {
             ogc_sys::VIDEO_WaitVSync();
         }
+    }
+
+    /// By calling this function inside a loop you enable double-buffering.
+    pub fn swap_framebuffers(&mut self) {
+        mem::swap(&mut self.framebuffer, &mut self.framebuffer_double);
     }
 }
