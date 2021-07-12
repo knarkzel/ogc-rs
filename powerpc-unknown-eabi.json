@@ -19,6 +19,13 @@
             "-mhard-float"
         ]
     },
+    "post-link-args": {
+        "gcc": [
+            "-lasnd",
+            "-logc",
+            "-lmad"
+        ]
+    },
     "panic-strategy": "abort",
     "relocation-model": "static",
     "target-env": "newlib",
