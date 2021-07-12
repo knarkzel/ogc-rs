@@ -210,8 +210,8 @@ impl Video {
         }
     }
 
-    /// By calling this function inside a loop you enable double-buffering.
-    pub fn swap_framebuffers(&mut self) {
+    /// By calling this function at the end of a loop you enable double-buffering.
+    pub fn flip_framebuffer(&mut self) {
         mem::swap(&mut self.framebuffer, &mut self.framebuffer_double);
     }
 }
