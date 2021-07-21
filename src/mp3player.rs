@@ -22,8 +22,8 @@
 ///
 /// ```rust
 /// const MUSIC: &[u8] = include_bytes!("../sample.mp3");
-/// let asnd = Asnd::init();
-/// let mp3 = Mp3Player::init();
+/// Asnd::init();
+/// Mp3Player::init();
 /// Mp3Player::play_buffer(MUSIC);
 /// ```
 pub struct Mp3Player;
