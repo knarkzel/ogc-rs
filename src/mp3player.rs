@@ -48,7 +48,7 @@ impl Mp3Player {
     }
 
     pub fn is_playing() -> bool {
-        unsafe { ogc_sys::MP3Player_IsPlaying() > 0 }
+        unsafe { ogc_sys::MP3Player_IsPlaying() }
     }
 
     pub fn stop() {
