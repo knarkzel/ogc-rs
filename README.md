@@ -1,6 +1,6 @@
 # ogc-rs
 
-A Rust wrapper library for devkitPro's [libogc](https://devkitpro.org/wiki/Getting_Started).
+A Rust wrapper library for devkitPro's [libogc](https://github.com/devkitPro/libogc).
 
 See the [examples](https://github.com/knarkzel/ogc-rs/tree/develop/examples) for how this library is used.
 
@@ -9,6 +9,7 @@ See the [examples](https://github.com/knarkzel/ogc-rs/tree/develop/examples) for
 In order to run examples you need following:
 
 - [rust](https://rustup.rs/)
+- [devkitPro](https://devkitpro.org/wiki/Getting_Started)
 - `cargo install just`
 - `pacman -S dolphin-emu`
 
