@@ -28,17 +28,9 @@ fn main(_argc: isize, _argv: *const *const u8) -> isize {
     Video::wait_vsync();
 
     // Debugging
-    let vec = vec![2, 3, 4, 5, 6, 7];
-    println!("Vector: {:?}", vec);
-
     Asnd::init();
     let mut buffer = (0..255).cycle().take(32 * 32 * 32 * 32).collect::<Vec<_>>();
-    let mut buffer1 = (100..255)
-        .cycle()
-        .take(32 * 32 * 32 * 32)
-        .collect::<Vec<_>>();
-    // Asnd::set_voice(VoiceOptions::new(), &mut buffer).unwrap();
-    Asnd::set_voice(VoiceOptions::new().voice(1), &mut buffer1).unwrap();
+    Asnd::set_voice(VoiceOptions::new().voice(1), &mut buffer).unwrap();
     Asnd::pause(false);
 
     loop {
