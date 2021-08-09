@@ -1,14 +1,23 @@
 # ogc-rs
 
-A Rust wrapper library for devkitPro's [libogc](https://github.com/devkitPro/libogc).
+A Rust wrapper library for devkitPro's [libogc](https://devkitpro.org/wiki/Getting_Started).
 
 See the [examples](https://github.com/knarkzel/ogc-rs/tree/develop/examples) for how this library is used.
-You can also run any of the examples, granted you have following dependencies:
 
+# Examples
+
+In order to run examples you need to install following:
+
+- [rust](https://rustup.rs/)
 - `cargo install just`
 - `pacman -S dolphin-emu`
 
-Then you can run the examples like so:
+and have these environment variables set:
+
+- `CLANG_VERSION`, for instance `12.0.1`
+- `DEVKITPRO`, for instance `/opt/devkitpro`
+- `DEVKITARM`, for instance `/opt/devkitpro/devkitARM`
+- `DEVKITPPC`, for instance `/opt/devkitpro/devkitPPC`
 
 ```bash
 git clone https://github.com/knarkzel/ogc-rs
