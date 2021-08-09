@@ -6,7 +6,7 @@ See the [examples](https://github.com/knarkzel/ogc-rs/tree/develop/examples) for
 
 # Examples
 
-In order to run examples you need to install following:
+In order to run examples you need following:
 
 - [rust](https://rustup.rs/)
 - `cargo install just`
